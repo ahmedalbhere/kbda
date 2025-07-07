@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام مبيعات مطعم الكبدة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- شريط التنقل العلوي -->
+        <header class="app-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1>مطعم الكبدة</h1>
+            <div class="current-time" id="current-time"></div>
+        </header>
+
+        <!-- القائمة الجانبية -->
+        <aside class="sidebar" id="sidebar">
+            <nav>
+                <a href="index.html" class="active">
+                    <i class="fas fa-cash-register"></i>
+                    <span>نقطة البيع</span>
+                </a>
+                <a href="admin.html">
+                    <i class="fas fa-utensils"></i>
+                    <span>إدارة الأصناف</span>
+                </a>
+                <a href="reports.html">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>التقارير</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span>مسؤول النظام</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <div class="categories-tabs">
+                <button class="tab-btn active" data-category="all">الكل</button>
+                <button class="tab-btn" data-category="كبدة">كبدة</button>
+                <button class="tab-btn" data-category="حواشي">حواشي</button>
+                <button class="tab-btn" data-category="فراخ">فراخ</button>
+            </div>
+
+            <div class="menu-items-grid" id="menu-items">
+                <!-- سيتم تعبئتها من JavaScript -->
+            </div>
+
+            <div class="current-bill">
+                <div class="bill-header">
+                    <h2>الفاتورة الحالية</h2>
+                    <button class="clear-btn" onclick="resetBill()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="bill-items" id="bill-items">
+                    <!-- العناصر المضافة للفاتورة -->
+                </div>
+                <div class="bill-summary">
+                    <div class="total-amount">
+                        <span>الإجمالي:</span>
+                        <span id="total-amount">0.00</span> جنيهاً
+                    </div>
+                    <button class="print-btn" onclick="printBill()">
+                        <i class="fas fa-print"></i> طباعة الفاتورة
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
