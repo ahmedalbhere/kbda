@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الأصناف - مطعم الكبدة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1>إدارة الأصناف</h1>
+            <div class="current-time" id="current-time"></div>
+        </header>
+
+        <aside class="sidebar" id="sidebar">
+            <nav>
+                <a href="index.html">
+                    <i class="fas fa-cash-register"></i>
+                    <span>نقطة البيع</span>
+                </a>
+                <a href="admin.html" class="active">
+                    <i class="fas fa-utensils"></i>
+                    <span>إدارة الأصناف</span>
+                </a>
+                <a href="reports.html">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>التقارير</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span>مسؤول النظام</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="admin-section">
+                <div class="add-item-form">
+                    <h2><i class="fas fa-plus-circle"></i> إضافة صنف جديد</h2>
+                    <div class="form-group">
+                        <input type="text" id="item-name" placeholder="اسم الصنف">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="item-price" placeholder="السعر">
+                    </div>
+                    <div class="form-group">
+                        <select id="item-category">
+                            <option value="كبدة">كبدة</option>
+                            <option value="حواشي">حواشي</option>
+                            <option value="فراخ">فراخ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>اختر أيقونة:</label>
+                        <div class="icon-options" id="icon-options">
+                            <!-- سيتم تعبئتها بواسطة JavaScript -->
+                        </div>
+                    </div>
+                    <button class="save-btn" onclick="addMenuItem()">
+                        <i class="fas fa-save"></i> حفظ الصنف
+                    </button>
+                </div>
+
+                <div class="current-items">
+                    <h2><i class="fas fa-list"></i> الأصناف الحالية</h2>
+                    <div class="items-list" id="items-list">
+                        <!-- سيتم تعبئتها بواسطة JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // الأيقونات المتاحة لكل تصنيف
+        const categoryIcons = {
+            'كبدة': ['fire', 'burn', 'heart', 'heartbeat', 'pepper-hot'],
+            'حواشي': ['drumstick-bite', 'meat', 'bone', 'hotdog', 'hamburger'],
+            'فراخ': ['kiwi-bird', 'drumstick', 'egg', 'feather', 'egg']
+        };
+
+        // تهيئة صفحة الإدارة
+        function initAdminPage() {
+            updateCurrentTime();
+            loadIconOptions();
+            displayCurrentItems();
+            setupEventListeners();
+        }
+
+        // تحميل خيارات الأيقونات
+        function loadIconOptions() {
+            const category = document.getElementById('item-category').value;
+            const iconContainer = document.getElementById('icon-options');
+            iconContainer.innerHTML = '';
+            
+            categoryIcons[category].forEach(icon => {
+                const iconBtn = document.createElement('button');
+                iconBtn.className = 'icon-btn';
+                iconBtn.innerHTML = `<i class="fas fa-${icon}"></i>`;
+                iconBtn.dataset.icon = icon;
+                iconBtn.onclick = function() {
+                    selectIcon(this);
+                };
+                iconContainer.appendChild(iconBtn);
+            });
+        }
+
+        // اختيار أيقونة
+        function selectIcon(btn) {
+            document.querySelectorAll('.icon-btn').forEach(b => {
+                b.classList.remove('selected');
+            });
+            btn.classList.add('selected');
+        }
+
+        // عرض الأصناف الحالية
+        function displayCurrentItems() {
+            const itemsContainer = document.getElementById('items-list');
+            itemsContainer.innerHTML = '';
+            
+            const items = JSON.parse(localStorage.getItem('menuItems')) || menuItems;
+            
+            items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item-card';
+                itemElement.innerHTML = `
+                    <div class="item-icon">
+                        <i class="fas fa-${item.icon}"></i>
+                    </div>
+                    <div class="item-details">
+                        <h3>${item.name}</h3>
+                        <p>${item.category} - ${item.price} جنيهاً</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="edit-btn" onclick="editItem(${item.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="deleteItem(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                itemsContainer.appendChild(itemElement);
+            });
+        }
+
+        // إضافة صنف جديد
+        function addMenuItem() {
+            const name = document.getElementById('item-name').value.trim();
+            const price = parseFloat(document.getElementById('item-price').value);
+            const category = document.getElementById('item-category').value;
+            const selectedIcon = document.querySelector('.icon-btn.selected');
+            
+            if (!name || isNaN(price)) {
+                alert('الرجاء إدخال اسم وسعر صحيحين للصنف');
+                return;
+            }
+            
+            if (!selectedIcon) {
+                alert('الرجاء اختيار أيقونة للصنف');
+                return;
+            }
+            
+            const icon = selectedIcon.dataset.icon;
+            const newItem = {
+                id: Date.now(), // استخدام الطوابع الزمنية كمعرفات فريدة
+                name,
+                price,
+                category,
+                icon
+            };
+            
+            let items = JSON.parse(localStorage.getItem('menuItems')) || [];
+            items.push(newItem);
+            localStorage.setItem('menuItems', JSON.stringify(items));
+            
+            // إعادة تعيين النموذج وتحديث القائمة
+            document.getElementById('item-name').value = '';
+            document.getElementById('item-price').value = '';
+            displayCurrentItems();
+            alert('تمت إضافة الصنف بنجاح');
+        }
+
+        // تحرير صنف موجود
+        function editItem(itemId) {
+            // يمكن تطوير هذه الوظيفة حسب الحاجة
+            alert('سيتم تطوير وظيفة التحرير في الإصدارات القادمة');
+        }
+
+        // حذف صنف
+        function deleteItem(itemId) {
+            if (confirm('هل أنت متأكد من حذف هذا الصنف؟')) {
+                let items = JSON.parse(localStorage.getItem('menuItems')) || [];
+                items = items.filter(item => item.id !== itemId);
+                localStorage.setItem('menuItems', JSON.stringify(items));
+                displayCurrentItems();
+            }
+        }
+
+        // إعداد مستمعي الأحداث
+        function setupEventListeners() {
+            document.getElementById('item-category').addEventListener('change', loadIconOptions);
+        }
+
+        // تهيئة الصفحة عند التحميل
+        document.addEventListener('DOMContentLoaded', initAdminPage);
+    </script>
+</body>
+</html>
