@@ -42,64 +42,37 @@
 
         <main class="main-content">
             <div class="reports-section">
-                <div class="report-filters">
-                    <select id="report-type" onchange="loadReport()">
-                        <option value="daily">تقرير يومي</option>
-                        <option value="weekly">تقرير أسبوعي</option>
-                        <option value="monthly">تقرير شهري</option>
-                    </select>
-                    <input type="date" id="report-date" onchange="loadReport()">
+                <div class="report-filters card">
+                    <div class="filter-group">
+                        <label for="report-type">نوع التقرير:</label>
+                        <select id="report-type">
+                            <option value="daily">يومي</option>
+                            <option value="weekly">أسبوعي</option>
+                            <option value="monthly">شهري</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="report-date">تاريخ:</label>
+                        <input type="date" id="report-date">
+                    </div>
+                    <button class="btn btn-primary" onclick="updateReport()">
+                        <i class="fas fa-sync-alt"></i> تحديث
+                    </button>
                 </div>
 
-                <div class="report-summary">
-                    <div class="summary-card total-sales">
-                        <i class="fas fa-receipt"></i>
-                        <div>
-                            <h3>إجمالي المبيعات</h3>
-                            <p id="total-sales">0.00 جنيهاً</p>
-                        </div>
-                    </div>
-                    <div class="summary-card items-count">
-                        <i class="fas fa-list-ol"></i>
-                        <div>
-                            <h3>عدد الأصناف المباعة</h3>
-                            <p id="items-count">0</p>
-                        </div>
-                    </div>
-                    <div class="summary-card avg-sale">
-                        <i class="fas fa-calculator"></i>
-                        <div>
-                            <h3>متوسط الفاتورة</h3>
-                            <p id="avg-sale">0.00 جنيهاً</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="report-details">
-                    <h2><i class="fas fa-table"></i> تفاصيل المبيعات</h2>
-                    <div class="table-container">
-                        <table id="report-table">
-                            <thead>
-                                <tr>
-                                    <th>الصنف</th>
-                                    <th>السعر</th>
-                                    <th>الكمية</th>
-                                    <th>الإجمالي</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- سيتم تعبئتها بواسطة JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
+                <div id="report-container">
+                    <!-- سيتم تعبئتها بواسطة JavaScript -->
                 </div>
 
                 <div class="report-actions">
-                    <button class="print-btn" onclick="printReport()">
+                    <button class="btn btn-secondary" onclick="printReport()">
                         <i class="fas fa-print"></i> طباعة التقرير
                     </button>
-                    <button class="export-btn" onclick="exportToExcel()">
+                    <button class="btn btn-success" onclick="exportToExcel()">
                         <i class="fas fa-file-excel"></i> تصدير لإكسل
+                    </button>
+                    <button class="btn btn-danger" onclick="clearAllData()" style="margin-right: auto;">
+                        <i class="fas fa-trash"></i> مسح جميع البيانات
                     </button>
                 </div>
             </div>
@@ -108,89 +81,6 @@
 
     <script src="script.js"></script>
     <script>
-        // تهيئة صفحة التقارير
-        function initReportsPage() {
-            updateCurrentTime();
-            setupEventListeners();
-            loadReport();
-        }
-
-        // تحميل التقرير
-        function loadReport() {
-            const reportType = document.getElementById('report-type').value;
-            const dateInput = document.getElementById('report-date').value;
-            
-            // في تطبيق حقيقي، هنا ستجلب البيانات من localStorage أو من الخادم
-            // هذا مثال تجريبي ببيانات وهمية لأغراض العرض
-            
-            const mockData = generateMockReportData(reportType, dateInput);
-            displayReport(mockData);
-        }
-
-        // عرض التقرير
-        function displayReport(data) {
-            document.getElementById('total-sales').textContent = 
-                data.totalSales.toFixed(2) + ' جنيهاً';
-            document.getElementById('items-count').textContent = 
-                data.itemsCount;
-            document.getElementById('avg-sale').textContent = 
-                data.averageSale.toFixed(2) + ' جنيهاً';
-            
-            const tableBody = document.querySelector('#report-table tbody');
-            tableBody.innerHTML = '';
-            
-            data.items.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>
-                        <i class="fas fa-${item.icon}"></i>
-                        ${item.name}
-                    </td>
-                    <td>${item.price.toFixed(2)} جنيهاً</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.total.toFixed(2)} جنيهاً</td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // إنشاء بيانات وهمية للتقرير (لأغراض العرض فقط)
-        function generateMockReportData(reportType, dateInput) {
-            const items = JSON.parse(localStorage.getItem('menuItems')) || [
-                { id: 1, name: "كبدة حارة", price: 30, category: "كبدة", icon: "fire" },
-                { id: 2, name: "كبدة بارد", price: 25, category: "كبدة", icon: "snowflake" },
-                { id: 3, name: "حواشي مخصوص", price: 40, category: "حواشي", icon: "drumstick-bite" },
-                { id: 4, name: "فراخ مشوية", price: 50, category: "فراخ", icon: "kiwi-bird" }
-            ];
-            
-            // اختيار عشوائي لبعض الأصناف
-            const reportItems = [];
-            for (let i = 0; i < 5 + Math.floor(Math.random() * 10); i++) {
-                const randomItem = items[Math.floor(Math.random() * items.length)];
-                const quantity = 1 + Math.floor(Math.random() * 5);
-                
-                reportItems.push({
-                    ...randomItem,
-                    quantity,
-                    total: randomItem.price * quantity
-                });
-            }
-            
-            // حساب الإجماليات
-            const totalSales = reportItems.reduce((sum, item) => sum + item.total, 0);
-            const itemsCount = reportItems.reduce((sum, item) => sum + item.quantity, 0);
-            const averageSale = itemsCount > 0 ? totalSales / itemsCount : 0;
-            
-            return {
-                reportType,
-                date: dateInput || new Date().toLocaleDateString(),
-                totalSales,
-                itemsCount,
-                averageSale,
-                items: reportItems
-            };
-        }
-
         // طباعة التقرير
         function printReport() {
             window.print();
@@ -198,19 +88,76 @@
 
         // تصدير لإكسل
         function exportToExcel() {
-            // يمكن تطوير هذه الوظيفة لتصدير البيانات الفعلية
-            alert('سيتم تطوير وظيفة التصدير لإكسل في الإصدارات القادمة');
+            const reportType = document.getElementById('report-type').value;
+            const dateInput = document.getElementById('report-date').value;
+            const selectedDate = new Date(dateInput);
+            
+            let report;
+            switch (reportType) {
+                case 'daily':
+                    report = generateDailyReport(selectedDate);
+                    break;
+                case 'weekly':
+                    const startDate = new Date(selectedDate);
+                    startDate.setDate(selectedDate.getDate() - selectedDate.getDay());
+                    report = generateWeeklyReport(startDate);
+                    break;
+                case 'monthly':
+                    report = generateMonthlyReport(selectedDate.getFullYear(), selectedDate.getMonth() + 1);
+                    break;
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // عنوان التقرير
+            csvContent += `تقرير ${getReportTitle(report)}\r\n`;
+            csvContent += `الفترة: ${getReportPeriod(report)}\r\n\r\n`;
+            
+            // الملخص
+            csvContent += "الملخص\r\n";
+            csvContent += `إجمالي المبيعات,${report.total.toFixed(2)}\r\n`;
+            csvContent += `عدد الفواتير,${report.transactions || 0}\r\n`;
+            csvContent += `عدد الأصناف المباعة,${report.items.length}\r\n\r\n`;
+            
+            // تفاصيل الأصناف
+            csvContent += "تفاصيل الأصناف\r\n";
+            csvContent += "الصنف,السعر,الكمية,الإجمالي\r\n";
+            
+            report.items.forEach(item => {
+                csvContent += `${item.name},${item.price.toFixed(2)},${item.quantity},${item.total.toFixed(2)}\r\n`;
+            });
+            
+            // إنشاء رابط التحميل
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            
+            // اسم الملف
+            let fileName = `تقرير_`;
+            if (report.month) {
+                fileName += `${report.month}_شهري`;
+            } else if (report.startDate) {
+                fileName += `من_${report.startDate.replace(/\//g, '-')}_إلى_${report.endDate.replace(/\//g, '-')}_أسبوعي`;
+            } else {
+                fileName += `${report.date.replace(/\//g, '-')}_يومي`;
+            }
+            fileName += ".csv";
+            
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
         }
 
-        // إعداد مستمعي الأحداث
-        function setupEventListeners() {
-            // تعيين تاريخ اليوم كقيمة افتراضية
-            const today = new Date();
-            document.getElementById('report-date').valueAsDate = today;
+        // مسح جميع البيانات (لأغراض التطوير)
+        function clearAllData() {
+            if (confirm('هل أنت متأكد من مسح جميع البيانات؟ لا يمكن استرجاعها بعد المسح!')) {
+                localStorage.removeItem(STORAGE_KEYS.MENU_ITEMS);
+                localStorage.removeItem(STORAGE_KEYS.DAILY_SALES);
+                localStorage.removeItem(STORAGE_KEYS.TRANSACTIONS);
+                alert('تم مسح جميع البيانات بنجاح');
+                location.reload();
+            }
         }
-
-        // تهيئة الصفحة عند التحميل
-        document.addEventListener('DOMContentLoaded', initReportsPage);
     </script>
 </body>
 </html>
