@@ -1,351 +1,758 @@
 /* أنماط أساسية */
 :root {
-    --primary-color: #e67e22;
-    --secondary-color: #d35400;
-    --dark-color: #2c3e50;
-    --light-color: #ecf0f1;
-    --success-color: #27ae60;
-    --danger-color: #e74c3c;
-    --border-radius: 8px;
-    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --primary-color: #e67e22; /* اللون البرتقالي الرئيسي */
+  --primary-dark: #d35400;  /* درجة أغمق للبرتقالي */
+  --secondary-color: #2c3e50; /* اللون الأزرق الداكن */
+  --light-color: #ecf0f1;   /* اللون الفاتح للخلفيات */
+  --dark-color: #333;       /* اللون الداكن للنصوص */
+  --success-color: #27ae60; /* اللون الأخضر للنجاح */
+  --danger-color: #e74c3c;  /* اللون الأحمر للتحذيرات */
+  --warning-color: #f39c12; /* اللون الأصفر للتنبيهات */
+  --border-radius: 8px;     /* زوايا دائرية */
+  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+  --transition: all 0.3s ease; /* حركة انتقالية */
 }
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Tajawal', Arial, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background-color: #f5f5f5;
-    color: #333;
-    direction: rtl;
+  font-family: 'Tajawal', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: var(--dark-color);
+  direction: rtl;
+  line-height: 1.6;
 }
 
-/* هيكل التطبيق */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* هيكل التطبيق العام */
 .app-container {
-    display: grid;
-    grid-template-areas:
-        "header header"
-        "sidebar main";
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto 1fr;
-    min-height: 100vh;
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
 }
 
+/* الهيدر المشترك */
 .app-header {
-    grid-area: header;
-    background-color: var(--dark-color);
-    color: white;
-    padding: 0.8rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: var(--box-shadow);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  grid-area: header;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--box-shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
 }
 
 .menu-toggle {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: none;
+  padding: 0.5rem;
 }
 
 .current-time {
-    font-size: 0.9rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
 }
 
+/* القائمة الجانبية */
 .sidebar {
-    grid-area: sidebar;
-    background-color: white;
-    width: 250px;
-    border-left: 1px solid #eee;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease;
+  grid-area: sidebar;
+  background-color: white;
+  width: 250px;
+  border-left: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar nav {
-    flex: 1;
-    padding: 1rem 0;
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
 }
 
 .sidebar a {
-    display: flex;
-    align-items: center;
-    padding: 0.8rem 1.5rem;
-    color: #555;
-    text-decoration: none;
-    transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  color: #555;
+  transition: var(--transition);
 }
 
 .sidebar a i {
-    margin-left: 10px;
-    width: 20px;
-    text-align: center;
+  margin-left: 10px;
+  width: 20px;
+  text-align: center;
+  font-size: 1.1rem;
 }
 
 .sidebar a.active {
-    background-color: var(--light-color);
-    color: var(--primary-color);
-    border-right: 3px solid var(--primary-color);
+  background-color: var(--light-color);
+  color: var(--primary-color);
+  border-right: 3px solid var(--primary-color);
+  font-weight: bold;
 }
 
 .sidebar a:hover:not(.active) {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
+  color: var(--primary-dark);
 }
 
 .sidebar-footer {
-    padding: 1rem;
-    border-top: 1px solid #eee;
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
 }
 
 .user-info {
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #666;
 }
 
 .user-info i {
-    margin-left: 8px;
-    color: #777;
+  margin-left: 8px;
+  color: var(--primary-color);
 }
 
+/* المحتوى الرئيسي */
 .main-content {
-    grid-area: main;
-    padding: 1rem;
-    overflow-y: auto;
-    background-color: #f9f9f9;
+  grid-area: main;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: #f9f9f9;
 }
 
-/* عناصر القائمة */
+/* أنماط عامة للبطاقات */
+.card {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* أنماط الأزرار */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  transition: var(--transition);
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+/* أنماط النماذج */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.2);
+}
+
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 0.8rem center;
+  background-size: 1rem;
+  padding-right: 0.8rem;
+}
+
+/* صفحة المبيعات */
 .categories-tabs {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
 }
 
 .tab-btn {
-    padding: 0.5rem 1rem;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.3s;
+  padding: 0.5rem 1rem;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+  font-size: 0.9rem;
 }
 
 .tab-btn.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 
 .menu-items-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .menu-item {
-    background-color: white;
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--box-shadow);
-    cursor: pointer;
-    transition: transform 0.3s;
+  background-color: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+  transition: transform 0.3s;
 }
 
 .menu-item:active {
-    transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 .menu-item-icon {
-    background-color: var(--light-color);
-    padding: 1rem;
-    text-align: center;
-    font-size: 2rem;
-    color: var(--primary-color);
+  background-color: var(--light-color);
+  padding: 1rem;
+  text-align: center;
+  font-size: 2rem;
+  color: var(--primary-color);
 }
 
 .menu-item-info {
-    padding: 0.8rem;
-    text-align: center;
+  padding: 0.8rem;
+  text-align: center;
 }
 
 .menu-item-info h3 {
-    margin-bottom: 0.3rem;
-    font-size: 1rem;
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
 }
 
 .menu-item-info p {
-    color: var(--secondary-color);
-    font-weight: bold;
+  color: var(--primary-dark);
+  font-weight: bold;
 }
 
-/* قسم الفاتورة */
 .current-bill {
-    background-color: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    padding: 1rem;
-    position: sticky;
-    bottom: 1rem;
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1rem;
 }
 
 .bill-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
 }
 
 .clear-btn {
-    background-color: var(--danger-color);
-    color: white;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.clear-btn:hover {
+  background-color: #c0392b;
 }
 
 .bill-items {
-    max-height: 200px;
-    overflow-y: auto;
-    margin-bottom: 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
 }
 
 .bill-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px dashed #eee;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #eee;
+  font-size: 0.9rem;
 }
 
 .bill-summary {
-    padding-top: 1rem;
-    border-top: 2px solid var(--primary-color);
+  padding-top: 1rem;
+  border-top: 2px solid var(--primary-color);
 }
 
 .total-amount {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-    font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
-.print-btn {
-    width: 100%;
-    padding: 0.8rem;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+/* صفحة الإدارة */
+.admin-section {
+  display: grid;
+  gap: 1.5rem;
 }
 
-.print-btn:hover {
-    background-color: var(--secondary-color);
+.add-item-form {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
 }
 
-/* تأثيرات للهواتف */
-@media (max-width: 768px) {
-    .app-container {
-        grid-template-areas:
-            "header"
-            "main";
-        grid-template-columns: 1fr;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-
-    .sidebar {
-        position: fixed;
-        top: 0;
-        right: 0;
-        height: 100vh;
-        transform: translateX(100%);
-        z-index: 200;
-        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .sidebar.active {
-        transform: translateX(0);
-    }
-
-    .main-content {
-        padding-bottom: 120px;
-    }
-
-    .menu-items-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    }
-
-    .current-bill {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        border-radius: 0;
-        padding: 1rem;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    }
+.add-item-form h2 {
+  margin-bottom: 1.5rem;
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-@media (max-width: 480px) {
-    .menu-items-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    }
-
-    .menu-item-icon {
-        font-size: 1.5rem;
-        padding: 0.8rem;
-    }
-
-    .menu-item-info h3 {
-        font-size: 0.9rem;
-    }
-
-    .menu-item-info p {
-        font-size: 0.8rem;
-    }
+.icon-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
-/* رسومات متحركة */
+.icon-btn {
+  background: none;
+  border: 2px solid #eee;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #666;
+  transition: var(--transition);
+}
+
+.icon-btn.selected {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: rgba(230, 126, 34, 0.1);
+}
+
+.save-btn {
+  margin-top: 1rem;
+}
+
+.current-items {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+}
+
+.current-items h2 {
+  margin-bottom: 1.5rem;
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.items-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.item-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background-color: #fafafa;
+  transition: var(--transition);
+}
+
+.item-card:hover {
+  background-color: #f0f0f0;
+}
+
+.item-icon {
+  margin-left: 1rem;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  min-width: 40px;
+  text-align: center;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-details h3 {
+  margin-bottom: 0.3rem;
+}
+
+.item-details p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn {
+  background-color: var(--danger-color);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* صفحة التقارير */
+.report-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.report-filters select,
+.report-filters input {
+  flex: 1;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+}
+
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-card {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.summary-card i {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.total-sales i {
+  background-color: rgba(39, 174, 96, 0.1);
+  color: var(--success-color);
+}
+
+.items-count i {
+  background-color: rgba(52, 152, 219, 0.1);
+  color: #3498db;
+}
+
+.avg-sale i {
+  background-color: rgba(155, 89, 182, 0.1);
+  color: #9b59b6;
+}
+
+.summary-card h3 {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.3rem;
+}
+
+.summary-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.report-details {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.report-details h2 {
+  margin-bottom: 1.5rem;
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: right;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: var(--secondary-color);
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+.report-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* تأثيرات الحركة */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.menu-item {
-    animation: fadeIn 0.3s ease forwards;
-    opacity: 0;
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
 }
 
-.menu-item:nth-child(1) { animation-delay: 0.1s; }
-.menu-item:nth-child(2) { animation-delay: 0.2s; }
-.menu-item:nth-child(3) { animation-delay: 0.3s; }
-/* ... يمكن إضافة المزيد حسب الحاجة */
+/* التجاوب مع أحجام الشاشات */
+@media (max-width: 992px) {
+  .menu-items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-areas:
+      "header"
+      "main";
+    grid-template-columns: 1fr;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 280px;
+    transform: translateX(100%);
+    z-index: 200;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    padding-bottom: 150px;
+  }
+
+  .current-bill {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+    padding: 1rem;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+  }
+
+  .report-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .report-filters {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  .menu-items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+
+  .menu-item-icon {
+    font-size: 1.5rem;
+    padding: 0.8rem;
+  }
+
+  .menu-item-info h3 {
+    font-size: 0.9rem;
+  }
+
+  .menu-item-info p {
+    font-size: 0.8rem;
+  }
+
+  .bill-item {
+    font-size: 0.8rem;
+  }
+
+  .total-amount {
+    font-size: 1rem;
+  }
+
+  .item-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem 0.5rem;
+  }
+
+  .item-icon {
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .item-actions {
+    margin-top: 0.5rem;
+  }
+}
+
+/* طباعة التقارير */
+@media print {
+  .app-header, .sidebar, .report-filters, .report-actions {
+    display: none !important;
+  }
+
+  .main-content {
+    padding: 0 !important;
+  }
+
+  .card, .current-bill, .report-summary, .report-details {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    page-break-inside: avoid;
+  }
+
+  table {
+    width: 100% !important;
+  }
+
+  th, td {
+    padding: 0.5rem !important;
+    font-size: 0.9rem !important;
+  }
+}
